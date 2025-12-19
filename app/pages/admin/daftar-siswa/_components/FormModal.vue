@@ -14,14 +14,16 @@ defineProps({
   }
 })
 
+const emits = defineEmits(['refetch'])
+
 const schema = z.object({
-  name: z.string().min(3),
-  class: z.string().min(3),
-  address: z.string().min(3),
+  name: z.string().min(3, 'Nama minimal 3 karakter'),
+  class: z.string().min(1, 'Kelas required'),
+  address: z.string().min(3, 'Alamat minimal 3 karakter'),
   email: z.string().email(),
-  phone: z.string().min(10),
-  parent_name: z.string().min(3),
-  parent_phone: z.string().min(10),
+  phone: z.string().min(10, 'No. Hp minimal 10 karakter'),
+  parent_name: z.string().min(3, 'Nama Orang tua minimal 3 karakter'),
+  parent_phone: z.string().min(10, 'No. Hp Orang tua minimal 10 karakter'),
 })
 
 const auth = useAuth()
@@ -30,8 +32,6 @@ const isOpen = defineModel('isOpen', {
   type: Boolean,
   default: false
 })
-
-const formRef = useTemplateRef('formRef')
 
 const state = ref({
   name: '',
@@ -44,23 +44,28 @@ const state = ref({
 })
 
 watch(auth, (newValue) => {
-console.log(newValue,'inivalue')
-  state.value.email = auth.user?.email ?? ''
+  if(newValue.user?.role === 'student'){
+    state.value.email = auth.user?.email ?? ''
+  }
 }, {
   immediate: true
 })
 
 async function submit(data: FormSubmitEvent<z.output<typeof schema>>) {
-  alert('wewe')
-  const { error, execute } = await useFetch('/api/student/create', {
+  const { error, execute } = await useHttp('/api/student/create', {
     method: 'POST',
-    body: data.data,
+    body: {
+      ...data.data,
+      idSiswa: auth.user?._id,
+      status: 'Active'
+    },
     watch: false,
     immediate: false
   })
   await execute()
-  if(!error){
+  if (!error.value) {
     isOpen.value = false
+    emits('refetch')
     state.value = {
       name: '',
       class: '',
@@ -78,16 +83,15 @@ async function submit(data: FormSubmitEvent<z.output<typeof schema>>) {
 <template>
   <UModal v-model:open="isOpen" :title="label">
     <template #body>
-      {{ formRef?.errors }}
-      <UForm ref="formRef" class="flex flex-col gap-5" :schema="schema" @submit="submit" :state="state">
+      <UForm class="flex flex-col gap-5" :schema="schema" @submit="submit" :state="state">
         <UFormField label="Nama" name="name">
-          <UInput class="w-full" v-model="state.name" />
+          <UInput class="w-full" v-model="state.name" placeholder="Masukkan nama"/>
         </UFormField>
         <UFormField label="Kelas" name="class">
-          <UInput class="w-full" v-model="state.class" />
+          <USelect v-model="state.class" :items="['X', 'XI', 'XII']" class="w-full" placeholder="Pilih kelas"/>
         </UFormField>
         <UFormField label="Alamat" name="address">
-          <UTextarea :rows="4" class="w-full" v-model="state.address" />
+          <UTextarea :rows="4" class="w-full" v-model="state.address" placeholder="Masukkan alamat"/>
         </UFormField>
         <UFormField label="Email" name="email">
           <UInput class="w-full" v-model="state.email" disabled/>

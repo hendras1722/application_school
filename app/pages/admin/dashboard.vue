@@ -3,11 +3,12 @@ import FormModal from './daftar-siswa/_components/FormModal.vue'
 
 const auth = useAuth()
 const isOpenAdd = ref(false)
-const { data: getData } = auth.user?.role === 'student' ? useFetch('/api/student/findOne',{
+console.log(auth)
+const { data: getData, execute } = auth.user?.role === 'student' ? useFetch('/api/student/single',{
   params: {
-    email: auth.user?.email
+    idSiswa: auth.user?._id
   }
-}) : useFetch('/api/teacher/findOne',{
+}) : useFetch('/api/teacher/single',{
   params: {
     email: auth.user?.email
   }
@@ -84,6 +85,17 @@ const columns = [
   { id: 'day', key: 'day', label: 'Hari', class: 'font-bold w-32' },
   { id: 'subjects', key: 'subjects', label: 'Mata Pelajaran' }
 ]
+
+async function refetch() {
+  const updateUser = await $fetch('/api/user', {
+    method: 'POST',
+    body: {
+      email: auth.user?.email
+    }
+  })
+  auth.setUser(updateUser)
+  await execute()
+}
 </script>
 
 <template>
@@ -92,7 +104,7 @@ const columns = [
       <UAlert color="error" variant="subtle" title="Hallooo"
         description="Oooopps kamu belum terdaftar di aplikasi yuk daftar dulu" icon="i-lucide-terminal" />
       <UButton @click="isOpenAdd = true" color="primary" icon="i-lucide-plus" label="Tambah Siswa" class="mt-4"/>
-      <FormModal v-model:open="isOpenAdd" label="Daftar" />
+      <FormModal @refetch="refetch" v-model:open="isOpenAdd" label="Daftar" />
     </template>
     <template v-if="getData?.message !== 'User not found'">
       <div

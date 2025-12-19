@@ -6,6 +6,8 @@ type CustomFetchOptions<T> = UseFetchOptions<T> & {
 };
 
 export function useHttp<T>(url: string, opts: CustomFetchOptions<T> = {}) {
+  const toast = useToast()
+
   const { excludeInterceptor, ...options } = opts;
   const defaults: UseFetchOptions<T>       = {
     async onRequest({ options }) {
@@ -28,6 +30,11 @@ export function useHttp<T>(url: string, opts: CustomFetchOptions<T> = {}) {
       if (!excludedInterceptor(response._data?.code)) {
         // error toast
       }
+      toast.add({
+        title: 'Uh oh! Something went wrong.',
+        description: response._data?.message,
+        color: 'error'
+      })
     }
   };
 

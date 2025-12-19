@@ -12,6 +12,12 @@ export const dataManagementMenu = [
     icon: 'lucide:user'
   },
   {
+    id: 'mapel',
+    label: 'Mata Pelajaran',
+    to: '/admin/mata-pelajaran',
+    icon: 'lucide:book'
+  },
+  {
     id: 'data-master',
     label: 'Data Master',
     icon: 'ic:baseline-article',

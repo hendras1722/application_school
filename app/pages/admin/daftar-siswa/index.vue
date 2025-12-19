@@ -1,68 +1,13 @@
 <script lang="ts" setup>
 import type { TableColumn } from '@nuxt/ui';
 import FormModal from './_components/FormModal.vue';
+import type { ListSiswa } from '~/pages/admin/daftar-siswa/_type/list';
+import DetailModal from './_components/DetailModal.vue';
 
-const isOpen = ref(false)
-const data = ref<any[]>([
-  {
-    id: 1,
-    name: 'Lindsay Walton',
-    position: 'Front-end Developer',
-    email: 'lindsay.walton@example.com',
-    role: 'Member',
-    class: 10,
-    status: 'Active'
-  },
-  {
-    id: 2,
-    name: 'Courtney Henry',
-    position: 'Designer',
-    email: 'courtney.henry@example.com',
-    role: 'Admin',
-    class: 10,
-    status: 'Active'
-  },
-  {
-    id: 3,
-    name: 'Tom Cook',
-    position: 'Director of Product',
-    email: 'tom.cook@example.com',
-    role: 'Member',
-    class: 10,
-    status: 'Active'
-  },
-  {
-    id: 4,
-    name: 'Whitney Francis',
-    position: 'Copywriter',
-    email: 'whitney.francis@example.com',
-    role: 'Admin',
-    class: 10,
-    status: 'Active'
-  },
-  {
-    id: 5,
-    name: 'Leonard Krasner',
-    position: 'Senior Designer',
-    email: 'leonard.krasner@example.com',
-    role: 'Owner',
-    class: 10,
-    status: 'Active'
-  },
-  {
-    id: 6,
-    name: 'Floyd Miles',
-    position: 'Principal Designer',
-    email: 'floyd.miles@example.com',
-    role: 'Member',
-    class: 10,
-    status: 'Active'
-  }
-])
 
 const columns: TableColumn<any>[] = [
   {
-    accessorKey: 'id',
+    accessorKey: '_id',
     header: 'ID'
   },
   {
@@ -70,8 +15,8 @@ const columns: TableColumn<any>[] = [
     header: 'Nama'
   },
   {
-    accessorKey: 'Kelas',
-    header: 'class'
+    accessorKey: 'class',
+    header: 'Kelas'
   },
   {
     accessorKey: 'status',
@@ -81,6 +26,22 @@ const columns: TableColumn<any>[] = [
     id: 'action'
   }
 ]
+
+const isOpen = ref(false)
+const isOpenDetail = ref(false)
+const detailData = ref<ListSiswa | null>(null)
+
+const router = useRouter()
+
+const { data: getData } = useHttp<ListSiswa[]>('/api/student/list')
+const list = computed(() => getData.value)
+
+
+function onDetail(data: ListSiswa){
+  detailData.value = data
+  isOpenDetail.value = true
+  router.replace(`?id=${data.idSiswa}`)
+}
 </script>
 
 <template>
@@ -89,13 +50,17 @@ const columns: TableColumn<any>[] = [
     <USeparator class="my-5" />
     <div class="flex gap-5 justify-between items-center">
       <UInput placeholder="Cari Nama Siswa..." />
-      <UButton label="Tambah Siswa" color="primary" icon="lucide:user-plus" />
+      <UButton label="Tambah Siswa" color="primary" icon="lucide:user-plus" @click="isOpen = true"/>
     </div>
-    <UTable :columns="columns" :data="data">
-      <template #action-cell>
-        <UButton label="Detail" @click="isOpen = true"/>
+    <UTable :columns="columns" :data="list">
+      <template #action-cell="{row}">
+        <UButton label="Detail" @click="onDetail(row.original)"/>
+      </template>
+      <template #status-cell="{row}">
+        <UBadge :label="row.original.status" class="capitalize" :color="row.original.status === 'aktif' ? 'success' : 'error'"/>
       </template>
     </UTable>
     <FormModal v-model:is-open="isOpen"/>
+    <DetailModal v-model:is-open="isOpenDetail" label="Detail Siswa" :data="list"/>
   </AdminContainer>
 </template>

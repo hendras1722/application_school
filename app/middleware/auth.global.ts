@@ -1,11 +1,11 @@
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware((to) => {
   const token = useCookie('token')
-  console.log(to.fullPath, from.fullPath)
-  if (!token.value && from.path !== '/login') {
-    return navigateTo('/login')
-  }
-  if(token.value && to.path === '/login') {
-    return navigateTo('/admin/dashboard')
+
+  if (!token.value && to.path !== '/login') {
+    return navigateTo('/login', { replace: true })
   }
 
+  if (token.value && to.path === '/login') {
+    return navigateTo('/admin/dashboard', { replace: true })
+  }
 })

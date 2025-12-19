@@ -44,6 +44,5 @@ export const StudentSchema = defineMongooseModel({
     homeroom_teacher: {
       type: 'String',
     },
-    
   },
 })

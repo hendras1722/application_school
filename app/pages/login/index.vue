@@ -27,22 +27,9 @@ async function onSubmit(event: FormSubmitEvent<z.output<typeof schema>>) {
 
   await execute()
   if (!error.value) {
-    navigateTo('/admin/dashboard')
+    window.location.href = '/admin/dashboard'
     return
   }
-  // const { data, error, execute } = await useFetch('/api/auth/login', {
-  //   method: 'POST',
-  //   body: event.data,
-  //   immediate: false,
-  //   watch: false
-  // })
-  // await execute()
-  // if (!error.value) {
-  //   token.value = data.value?.token
-  //   navigateTo('/admin/dashboard')
-  //   return
-  // }
-
 }
 </script>
 

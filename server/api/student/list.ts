@@ -1,10 +1,7 @@
 
 export default defineEventHandler(async (event) => {
   try {
-    const params    = getQuery(event)
-    const checkUser = await StudentSchema.findOne({
-      email: params.email,
-    })
+    const checkUser = await StudentSchema.find()
     if (!checkUser) {
       return {
         code: 200,
