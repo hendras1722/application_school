@@ -77,6 +77,9 @@ watch(state, (newValue) => {
   deep: true
 })
 
+watch(() => state.value.fromTime, (newValue) => {
+  state.value.toTime = ''
+})
 
 </script>
 

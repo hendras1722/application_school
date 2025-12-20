@@ -16,11 +16,12 @@ export default defineEventHandler(async (event) => {
   const token      = getCookie(event, 'token')
   const path       = getRouterParam(event, 'path') ?? ''
 
-  if (token) {
-    event.node.req.headers.authorization = `Bearer ${token}`
-  }
+  // if (token) {
+  //   event.node.req.headers.authorization = `Bearer ${token}`
+  // }
 
   const queryParam = getQuery(event)
+  console.log(withQuery(joinURL(apiBaseUrl, path), queryParam))
 
   return await proxyRequest(
     event,

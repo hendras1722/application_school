@@ -1,7 +1,17 @@
 
 export default defineEventHandler(async (event) => {
   try {
-    const checkUser = await StudentSchema.find()
+    const checkUser = await StudentSchema.aggregate([
+      {
+        $lookup: {
+          from: 'teachers',
+          localField: 'homeroom_teacher',
+          foreignField: 'idTeacher',
+          as: 'teacher',
+        },
+      },
+      { $unwind: { path: '$teacher', preserveNullAndEmptyArrays: true } },
+    ])
     if (!checkUser) {
       return {
         code: 200,

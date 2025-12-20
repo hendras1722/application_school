@@ -1,9 +1,9 @@
 import { defineMongooseModel } from '#nuxt/mongoose'
 
-export const StudentSchema = defineMongooseModel({
-  name: 'Student',
+export const TeacherSchema = defineMongooseModel({
+  name: 'Teacher',
   schema: {
-    idSiswa: {
+    idTeacher: {
       type: 'string',
       ref: 'User',
       required: true,
@@ -13,9 +13,6 @@ export const StudentSchema = defineMongooseModel({
       ref: 'User',
     },
     name: {
-      type: 'string',
-    },
-    nisn: {
       type: 'string',
     },
     updated_at: {
@@ -37,18 +34,8 @@ export const StudentSchema = defineMongooseModel({
     address: {
       type: 'String',
     },
-    phone_student: {
+    phone: {
       type: 'String',
-    },
-    parent_phone: {
-      type: 'String',
-    },
-    parent_name: {
-      type: 'String',
-    },
-    homeroom_teacher: {
-      type: 'String',
-      ref: 'Teacher',
     },
   },
 })

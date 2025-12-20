@@ -14,8 +14,8 @@ const emit = defineEmits<{
 const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'))
 const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'))
 
-const hour = ref('00')
-const minute = ref('00')
+const hour = ref('')
+const minute = ref('')
 
 const parseTime = (timeStr?: string) => {
   if (!timeStr || !timeStr.includes(':')) return null
@@ -50,11 +50,11 @@ const isMinuteDisabled = (mStr: string) => {
 const syncInternalState = (val?: string) => {
   if (val && val.includes(':')) {
     const [h, m] = val.split(':')
-    hour.value = h || '00'
-    minute.value = m || '00'
+    hour.value = h || ''
+    minute.value = m || ''
   } else {
-    hour.value = '00'
-    minute.value = '00'
+    hour.value = ''
+    minute.value = ''
   }
 }
 
@@ -92,9 +92,9 @@ const setHour = (h: string) => {
       const minTime = parseTime(props.min)
       const maxTime = parseTime(props.max)
       if (minTime && Number(hour.value) === minTime.h) {
-        minute.value = minTime.m?.toString().padStart(2, '0') ?? '00'
+        minute.value = minTime.m?.toString().padStart(2, '0') ?? ''
       } else if (maxTime && Number(hour.value) === maxTime.h) {
-        minute.value = maxTime.m?.toString().padStart(2, '0') ?? '00'
+        minute.value = maxTime.m?.toString().padStart(2, '0') ?? ''
       }
     }
   })

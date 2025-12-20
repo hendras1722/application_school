@@ -1,11 +1,16 @@
 import type { User } from "~/type/user"
 
 export const useAuth =  defineStore('auth', () => {
-  const token = useCookie('token')
-  const user  = useState<User | null>('user', () => null)
+  const token   = useCookie('token')
+  const user    = useState<User | null>('user', () => null)
+  const profile = useState<any>('profile', () => null)
 
   function setUser(data: any) {
     user.value = data
+  }
+
+  function setProfile(data: any) {
+    profile.value = data
   }
 
   function setToken(data: any) {
@@ -22,6 +27,8 @@ export const useAuth =  defineStore('auth', () => {
     user,
     setUser,
     setToken,
-    logout
+    logout,
+    profile,
+    setProfile
   }
 })

@@ -9,7 +9,7 @@ export const UserSchema = defineMongooseModel({
     },
     role: {
       type: 'string',
-      enum: ['teacher', 'student'],
+      enum: ['teacher', 'student', 'admin'],
     },
   },
 })

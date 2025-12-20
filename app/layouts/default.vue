@@ -34,23 +34,10 @@ const {
         <div v-if="!sidebarCollapsed">
           <div class="space-y-1">
             <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Data Management
+             Menu
             </h3>
             <NavMenu
               v-for="item in dataManagementMenu"
-              :key="item.id"
-              :item="item"
-              :collapsed="sidebarCollapsed"
-              :open-menus="openMenus"
-              @toggle="handleMenuToggle"
-            />
-          </div>
-          <div class="pt-4 mt-4 border-t border-gray-200 space-y-1">
-            <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Settings
-            </h3>
-            <NavMenu
-              v-for="item in settingsMenu"
               :key="item.id"
               :item="item"
               :collapsed="sidebarCollapsed"

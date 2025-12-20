@@ -35,7 +35,7 @@ const router = useRouter()
 
 const { data: getData } = useHttp<ListSiswa[]>('/api/student/list')
 const list = computed(() => getData.value)
-
+const auth = useAuth()
 
 function onDetail(data: ListSiswa){
   detailData.value = data
@@ -50,14 +50,14 @@ function onDetail(data: ListSiswa){
     <USeparator class="my-5" />
     <div class="flex gap-5 justify-between items-center">
       <UInput placeholder="Cari Nama Siswa..." />
-      <UButton label="Tambah Siswa" color="primary" icon="lucide:user-plus" @click="isOpen = true"/>
+      <UButton v-if="auth?.user?.role === 'admin'" label="Tambah Siswa" color="primary" icon="lucide:user-plus" @click="isOpen = true"/>
     </div>
     <UTable :columns="columns" :data="list">
       <template #action-cell="{row}">
         <UButton label="Detail" @click="onDetail(row.original)"/>
       </template>
       <template #status-cell="{row}">
-        <UBadge :label="row.original.status" class="capitalize" :color="row.original.status === 'aktif' ? 'success' : 'error'"/>
+        <UBadge :label="row.original.status" class="capitalize" :color="row.original.status.toLowerCase() === 'active' ? 'success' : 'error'"/>
       </template>
     </UTable>
     <FormModal v-model:is-open="isOpen"/>

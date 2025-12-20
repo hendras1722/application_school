@@ -12,15 +12,27 @@ export default defineNuxtPlugin(async () => {
       }
     })
 
-    const checkUser = await $fetch('/api/user', {
+    const checkUser = await $fetch<any>('/api/user', {
       method: 'POST',
       body: {
         email: getMe.data.email
       }
     })
 
+    const profile = checkUser.role === 'student' ? await $fetch<any>('/api/student/single', {
+      params: {
+        idSiswa: checkUser._id
+      }
+    }) : await $fetch<any>('/api/teacher/single', {
+      params: {
+        idTeacher: checkUser._id
+      }
+    })
+    console.log(profile)
+
     const auth = useAuth()
     auth.setUser(checkUser)
+    auth.setProfile(profile)
 
   } catch (error) {
     console.error('[AUTH PLUGIN ERROR]', error)

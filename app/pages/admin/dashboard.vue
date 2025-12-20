@@ -3,7 +3,6 @@ import FormModal from './daftar-siswa/_components/FormModal.vue'
 
 const auth = useAuth()
 const isOpenAdd = ref(false)
-console.log(auth)
 const { data: getData, execute } = auth.user?.role === 'student' ? useFetch('/api/student/single',{
   params: {
     idSiswa: auth.user?._id
@@ -27,7 +26,6 @@ const student = ref({
   ]
 })
 
-// Konfigurasi Data untuk nuxt-charts
 const chartData = computed(() =>
   student.value.grades.map((value, index) => ({
     label: `Ujian ${index + 1}`,
@@ -74,13 +72,11 @@ const schedule = [
   { day: 'Minggu', subjects: 'Libur' }
 ]
 
-// Hitung Rata-rata Kemajuan
 const averageProgress = computed(() => {
   const sum = student.value.grades.reduce((a, b) => a + b, 0)
   return Math.round(sum / student.value.grades.length)
 })
 
-// Konfigurasi kolom tabel
 const columns = [
   { id: 'day', key: 'day', label: 'Hari', class: 'font-bold w-32' },
   { id: 'subjects', key: 'subjects', label: 'Mata Pelajaran' }
@@ -100,27 +96,28 @@ async function refetch() {
 
 <template>
   <UContainer>
-    <template v-if="getData?.message === 'User not found'">
+    <!-- {{ auth }} -->
+    <template v-if="!auth?.profile">
       <UAlert color="error" variant="subtle" title="Hallooo"
         description="Oooopps kamu belum terdaftar di aplikasi yuk daftar dulu" icon="i-lucide-terminal" />
       <UButton @click="isOpenAdd = true" color="primary" icon="i-lucide-plus" label="Tambah Siswa" class="mt-4"/>
       <FormModal @refetch="refetch" v-model:open="isOpenAdd" label="Daftar" />
     </template>
-    <template v-if="getData?.message !== 'User not found'">
+    <template v-else>
       <div
         class="flex flex-col md:flex-row items-center justify-between gap-6 mb-8 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
         <div class="flex items-center gap-4">
-          <UAvatar :src="student.photo" :alt="student.name" size="xl" class="ring-2 ring-primary-500" />
+          <!-- <UAvatar :src="student.photo" :alt="student.name" size="xl" class="ring-2 ring-primary-500" /> -->
           <div>
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">{{ student.name }}</h1>
-            <p class="text-gray-500 dark:text-gray-400 text-sm">NISN: {{ student.nisn }} | Kelas 12-A</p>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">{{ auth.profile.name }}</h1>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">NISN: {{ auth.profile.class }} | Kelas 12-A</p>
           </div>
         </div>
   
         <div class="flex flex-col items-end gap-2">
           <div class="text-right">
             <span class="text-sm text-gray-500 block mb-1">Status Kehadiran Hari Ini:</span>
-            <UBadge :color="student.attendanceToday ? 'primary' : 'red'" variant="subtle" size="lg" class="px-4 py-1">
+            <UBadge :color="student.attendanceToday ? 'primary' : 'secondary'" variant="subtle" size="lg" class="px-4 py-1">
               <UIcon :name="student.attendanceToday ? 'i-heroicons-check-circle' : 'i-heroicons-x-circle'" class="mr-1" />
               {{ student.attendanceToday ? 'Hadir' : 'Absen' }}
             </UBadge>
@@ -130,10 +127,8 @@ async function refetch() {
   
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
   
-        <!-- Main Content: Progress & Schedule -->
         <div class="lg:col-span-2 space-y-6">
   
-          <!-- Grafik Kemajuan Menggunakan nuxt-charts -->
           <UCard>
             <template #header>
               <div class="flex items-center justify-between">
@@ -143,13 +138,11 @@ async function refetch() {
             </template>
   
             <div class="h-64">
-              <!-- Menggunakan komponen nuxt-charts -->
               <BarChart :data="chartData" :categories="chartData.map(d => d.label)" x-axis="label" :y-axis="['value']"
                 :height="256" />
             </div>
           </UCard>
   
-          <!-- Tabel Jadwal Pelajaran -->
           <UCard>
             <template #header>
               <h3 class="font-semibold text-lg">Jadwal Pelajaran Seminggu</h3>
@@ -164,15 +157,13 @@ async function refetch() {
           </UCard>
         </div>
   
-        <!-- Sidebar: Notes & Stats -->
         <div class="space-y-6">
   
-          <!-- Card Catatan -->
           <UCard>
             <template #header>
               <div class="flex items-center gap-2">
                 <UIcon name="i-heroicons-pencil-square" class="text-primary-500" />
-                <h3 class="font-semibold">Catatan Penting</h3>
+                <h3 class="font-semibold">Notif dari Guru</h3>
               </div>
             </template>
             <div class="space-y-4">
@@ -185,15 +176,14 @@ async function refetch() {
             </div>
           </UCard>
   
-          <!-- Quick Stats -->
           <div class="grid grid-cols-2 gap-4">
             <div class="bg-primary-600 p-4 rounded-xl text-white shadow-lg shadow-primary-500/20">
-              <p class="text-xs opacity-80">Total SKS</p>
-              <p class="text-2xl font-bold">24</p>
+              <p class="text-xs opacity-80">Sikap</p>
+              <p class="text-2xl font-bold">B</p>
             </div>
-            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
-              <p class="text-xs text-gray-500">Ranking</p>
-              <p class="text-2xl font-bold text-primary-600">03 <span class="text-sm text-gray-400">/ 30</span></p>
+            <div class="bg-primary-600 p-4 rounded-xl text-white shadow-lg shadow-primary-500/20">
+              <p class="text-xs opacity-80">Absensi</p>
+              <p class="text-2xl font-bold">B</p>
             </div>
           </div>
         </div>
