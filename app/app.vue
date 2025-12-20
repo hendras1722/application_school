@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import Splashscreen from './components/Splashscreen.vue';
-
+import { TooltipProvider } from 'reka-ui'
 const config = useRuntimeConfig()
 </script>
 
@@ -8,6 +8,8 @@ const config = useRuntimeConfig()
   <NuxtPwaManifest v-if="config.public.DEV !== 'development'" />
   <Splashscreen />
   <NuxtLayout>
-    <NuxtPage />
+    <TooltipProvider>
+      <NuxtPage />
+    </TooltipProvider>
   </NuxtLayout>
 </template>
