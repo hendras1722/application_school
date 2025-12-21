@@ -23,6 +23,12 @@ export const dataManagementMenu = [
     to: '/admin/mata-pelajaran',
     icon: 'lucide:book'
   },
+  {
+    id: 'announcement',
+    label: 'Pengumuman',
+    to: '/admin/pengumuman',
+    icon: 'lucide:bell'
+  },
 ];
 
 export const settingsMenu = [

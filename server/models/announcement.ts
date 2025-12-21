@@ -1,13 +1,13 @@
 import { defineMongooseModel } from '#nuxt/mongoose'
 
-export const CurriculumSchema = defineMongooseModel({
-  name: 'Curriculum',
+export const AnnouncementSchema = defineMongooseModel({
+  name: 'Announcement',
   schema: {
-    name: {
+    to: {
       type: 'string',
       required: true,
     },
-    class: {
+    message: {
       type: 'string',
       required: true,
     },

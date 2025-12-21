@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   try {
     const body               = await readBody(event)
-    const checkAvailableUser = await $fetch(`${config.public.baseURL}/api/auth/check-email`, {
+    const checkAvailableUser = await $fetch(`${config.public.BASE_URL}/api/auth/check-email`, {
       method: 'POST',
       body: {
         email: body.email,
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     })
 
     if (checkAvailableUser.message === 'User not found') {
-      const register = await $fetch(`${config.public.baseURL}/api/auth/register`, {
+      const register = await $fetch(`${config.public.BASE_URL}/api/auth/register`, {
         method: 'POST',
         body: {
           email: body.email,

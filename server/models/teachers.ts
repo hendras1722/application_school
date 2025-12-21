@@ -38,4 +38,9 @@ export const TeacherSchema = defineMongooseModel({
       type: 'String',
     },
   },
+  options: {
+    timestamps: {
+      createdAt: 'created_at',
+    },
+  },
 })

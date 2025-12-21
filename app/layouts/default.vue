@@ -23,10 +23,8 @@ const {
       'flex flex-col h-full'
     ]" :style="sidebarStyles">
       <div class="flex items-center h-16 px-4 border-b border-gray-200">
-        <div
-          class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center"
-        >
-          <span class="text-white font-bold text-sm">D</span>
+        <div class="text-black flex justify-center">
+          <span v-if="!sidebarCollapsed" class="font-bold text-lg">SD Muh 16</span>
         </div>
       </div>
 

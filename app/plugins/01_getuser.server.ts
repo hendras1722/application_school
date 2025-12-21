@@ -28,7 +28,6 @@ export default defineNuxtPlugin(async () => {
         idTeacher: checkUser._id
       }
     })
-    console.log(profile)
 
     const auth = useAuth()
     auth.setUser(checkUser)

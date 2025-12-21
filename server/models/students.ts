@@ -5,8 +5,8 @@ export const StudentSchema = defineMongooseModel({
   schema: {
     idSiswa: {
       type: 'string',
-      ref: 'User',
       required: true,
+      unique: true,
     },
     email: {
       type: 'string',
@@ -49,6 +49,11 @@ export const StudentSchema = defineMongooseModel({
     homeroom_teacher: {
       type: 'String',
       ref: 'Teacher',
+    },
+  },
+  options: {
+    timestamps: {
+      createdAt: 'created_at',
     },
   },
 })

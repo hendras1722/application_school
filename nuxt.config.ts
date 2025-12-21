@@ -19,7 +19,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       DEV: process.env.NODE_ENV,
-      baseURL: 'http://localhost:3000'
+      BASE_URL: ''
     }
   },
   devtools: { enabled: true },

@@ -12,4 +12,9 @@ export const UserSchema = defineMongooseModel({
       enum: ['teacher', 'student', 'admin'],
     },
   },
+  options: {
+    timestamps: {
+      createdAt: 'created_at',
+    },
+  },
 })

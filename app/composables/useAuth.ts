@@ -10,7 +10,16 @@ export const useAuth =  defineStore('auth', () => {
   }
 
   function setProfile(data: any) {
-    profile.value = data
+    console.log(data,'inidata')
+    if(!data) {
+      profile.value = {
+        data: null
+      }
+      return
+    }
+    profile.value = {
+      data: data
+    }
   }
 
   function setToken(data: any) {

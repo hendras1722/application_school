@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 
     // 1. Cek user di auth service
     const checkAuthUser = await $fetch(
-      `${config.public.baseURL}/api/auth/check-email`,
+      `${config.public.BASE_URL}/api/auth/check-email`,
       {
         method: 'POST',
         body: { email: body.email },
@@ -16,25 +16,23 @@ export default defineEventHandler(async (event) => {
 
     let userId: string
 
-    // 2. Kalau user auth belum ada → register
-    if (checkAuthUser.message === 'User not found') {
-      const register = await $fetch(
-        `${config.public.baseURL}/api/auth/register`,
-        {
-          method: 'POST',
-          body: {
-            email: body.email,
-            password: body.nisn,
-          },
-        }
-      )
+    // if (checkAuthUser.message === 'User not found') {
+      // await $fetch(
+      //   `${config.public.baseURL}/api/auth/register`,
+      //   {
+      //     method: 'POST',
+      //     body: {
+      //       email: body.email,
+      //       password: body.nisn,
+      //     },
+      //   }
+      // )
 
-      userId = register.data.id
-    } else {
-      userId = checkAuthUser.data._id
-    }
+      userId = body.idSiswa
+    // } else {
+    //   userId = checkAuthUser.data._id
+    // }
 
-    // 3. Kalau student sudah ada → return langsung
     const existingStudent = await StudentSchema.findOne({
       email: body.email,
     })

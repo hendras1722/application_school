@@ -24,4 +24,9 @@ export const ScheduleSchema = defineMongooseModel({
       required: true,
     },
   },
+  options: {
+    timestamps: {
+      createdAt: 'created_at',
+    },
+  },
 })

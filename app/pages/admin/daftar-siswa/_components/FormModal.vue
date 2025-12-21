@@ -60,6 +60,7 @@ watch(auth, (newValue) => {
 })
 
 async function submit(data: FormSubmitEvent<z.output<typeof schema>>) {
+  console.log(auth.user?._id)
   const { error, execute } = await useHttp('/api/student/create', {
     method: 'POST',
     body: {
